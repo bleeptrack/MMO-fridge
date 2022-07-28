@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
             canvas {
                 border: 1px solid black;
@@ -33,6 +34,16 @@
                 socket.emit('move', {x:x , y:y });
             }
 
+            canvas.ontouchmove = function (e) {
+                let x = e.touches[0].clientX
+                let y = e.touches[0].clientY
+                ctx.fillStyle = "white"
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = "black"
+                ctx.fillRect(x, y, 10, 10)
+
+                socket.emit('move', {x:x , y:y });
+            }
 
 
 

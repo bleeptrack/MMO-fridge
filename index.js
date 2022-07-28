@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 let stageID = undefined
-let wordList = getWordsList('english', 300);
+let wordList = getWordsList('english', 2000);
 wordList = _.shuffle(wordList)
 let counter = 0
 
