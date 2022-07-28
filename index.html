@@ -15,9 +15,11 @@
             let canvas = document.querySelector("canvas")
             let ctx = canvas.getContext("2d")
 
-            canvas.onmousemove = function(e) {
+            canvas.onmousemove = function (e) {
                 let x = e.offsetX
                 let y = e.offsetY
+                ctx.fillStyle = "white"
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
                 ctx.fillStyle = "black"
                 ctx.fillRect(x, y, 10, 10)
             }
