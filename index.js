@@ -23,6 +23,7 @@ io.on('connection', (socket) => {
       }
 
       io.to(stageID).emit("join", msg);
+      socket.emit("welcome", msg);
     }
 
   socket.on("disconnect", (reason) => {
