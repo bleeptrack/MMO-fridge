@@ -25,8 +25,17 @@ io.on('connection', (socket) => {
       io.to(stageID).emit("join", msg);
     }
 
+  socket.on("disconnect", (reason) => {
+    if(stageID){
+      let msg = {
+         ID: socket.id
+      }
+
+      io.to(stageID).emit("leave", msg);
+    }
+  });
+
   socket.on('move', (msg) => {
-    console.log('message: ' + msg);
     if(stageID){
         msg.ID = socket.id
         io.to(stageID).emit("move", msg);

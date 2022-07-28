@@ -20,13 +20,18 @@
             let objects = {}
 
             socket.on("move", function(msg) {
-                console.log(msg)
-                objects[msg.ID].x = msg.x
-                objects[msg.ID].y = msg.y
+                if(objects[msg.ID]){
+                    objects[msg.ID].x = msg.x
+                    objects[msg.ID].y = msg.y
+                }
             })
 
             socket.on("join", function(msg) {
                 objects[msg.ID] = {text: msg.word, x: 200, y:300}
+            })
+
+            socket.on("leave", function(msg) {
+                delete objects[msg.ID]
             })
 
 
