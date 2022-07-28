@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas width="800" height="600"></canvas>
+
+        <script>
+            let canvas = document.querySelector("canvas")
+            let ctx = canvas.getContext("2d")
+
+            canvas.onmousemove = function(e) {
+                let x = e.offsetX
+                let y = e.offsetY
+                ctx.fillStyle = "black"
+                ctx.fillRect(x, y, 10, 10)
+            }
+        </script>
+    </body>
+</html>
