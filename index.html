@@ -10,11 +10,17 @@
     </head>
     <body>
         <canvas width="800" height="600"></canvas>
+        <span id="player-text"></span>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             let canvas = document.querySelector("canvas")
             let ctx = canvas.getContext("2d")
             var socket = io();
+
+            socket.on("welcome", function(msg) {
+                let span = document.getElementById("player-text")
+                span.innerHTML = msg.word
+            })
 
             canvas.onmousemove = function (e) {
                 let x = e.offsetX
