@@ -10,6 +10,8 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.use(express.static('public'));
+
 app.get('/stage', (req, res) => {
   res.sendFile(__dirname + '/stage.html');
 });

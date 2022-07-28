@@ -3,13 +3,25 @@
     <head>
         <meta charset="utf-8" />
         <style>
+            #stage {
+                position: relative;
+            }
+            #stage * {
+                position: absolute;
+            }
+            img {
+                max-width: 800px;
+            }
             canvas {
                 border: 1px solid black;
             }
         </style>
     </head>
     <body>
-        <canvas width="800" height="600"></canvas>
+        <div id="stage">
+            <img src="whiteboard.jpg">
+            <canvas width="800" height="600"></canvas>
+        </div>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             let canvas = document.querySelector("canvas")
@@ -29,8 +41,6 @@
                 objects[msg.ID] = {text: msg.word, x: 200, y:300}
             })
 
-
-
             function render() {
                 update()
 
@@ -38,7 +48,14 @@
                 ctx.fillStyle = "black"
                 ctx.font = "30px Arial"
                 for ([id,o] of Object.entries(objects)) {
+
+                    ctx.fillStyle = "white"
+                    ctx.strokeStyle = "black"
+                    ctx.fillRect(o.x - 10, o.y - 30, ctx.measureText(o.text).width + 20, 40)
+                    ctx.strokeRect(o.x - 10, o.y - 30, ctx.measureText(o.text).width + 20, 40)
+                    ctx.fillStyle = "black"
                     ctx.fillText(o.text, o.x, o.y)
+                                // white rect behind word
                 }
                 requestAnimationFrame(render)
             }
