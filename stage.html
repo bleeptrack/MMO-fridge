@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas width="800" height="600"></canvas>
+
+        <script>
+            let canvas = document.querySelector("canvas")
+            let ctx = canvas.getContext("2d")
+
+            let objects = [
+                {id: 1, text: "llamas", x: 100, y: 100},
+                {id: 2, text: "lazy", x: 200, y: 150},
+            ]
+
+            function render() {
+                update()
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = "black"
+                ctx.font = "30px Arial"
+                for (o of objects) {
+                    ctx.fillText(o.text, o.x, o.y)
+                }
+                requestAnimationFrame(render)
+            }
+
+            function update() {
+                objects[0].x = 100 + Math.sin(Date.now() / 1000) * 100
+            }
+
+            render()
+        </script>
+    </body>
+</html>
