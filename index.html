@@ -10,10 +10,11 @@
     </head>
     <body>
         <canvas width="800" height="600"></canvas>
-
+        <script src="/socket.io/socket.io.js"></script>
         <script>
             let canvas = document.querySelector("canvas")
             let ctx = canvas.getContext("2d")
+            var socket = io();
 
             canvas.onmousemove = function (e) {
                 let x = e.offsetX
@@ -22,7 +23,16 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
                 ctx.fillStyle = "black"
                 ctx.fillRect(x, y, 10, 10)
+
+                socket.emit('move', {x:x , y:y });
             }
+
+
+
+
         </script>
     </body>
 </html>
+
+
+
