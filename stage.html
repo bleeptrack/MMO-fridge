@@ -39,7 +39,7 @@
             })
 
             socket.on("join", function(msg) {
-                objects[msg.ID] = {text: msg.word, x: 200, y:300}
+                objects[msg.ID] = {text: msg.word, x: 200, y:300, rotation: (Math.random()-0.5)*0.1}
             })
 
             socket.on("leave", function(msg) {
@@ -53,14 +53,16 @@
                 ctx.fillStyle = "black"
                 ctx.font = "30px Arial"
                 for ([id,o] of Object.entries(objects)) {
-
+                    ctx.save()
+                    ctx.rotate(o.rotation)
+                    ctx.translate(o.x, o.y)
                     ctx.fillStyle = "white"
                     ctx.strokeStyle = "black"
-                    ctx.fillRect(o.x - 10, o.y - 30, ctx.measureText(o.text).width + 20, 40)
-                    ctx.strokeRect(o.x - 10, o.y - 30, ctx.measureText(o.text).width + 20, 40)
+                    ctx.fillRect(- 10, - 30, ctx.measureText(o.text).width + 20, 40)
+                    ctx.strokeRect(- 10, - 30, ctx.measureText(o.text).width + 20, 40)
                     ctx.fillStyle = "black"
-                    ctx.fillText(o.text, o.x, o.y)
-                                // white rect behind word
+                    ctx.fillText(o.text, 0, 0)
+                    ctx.restore()
                 }
                 requestAnimationFrame(render)
             }
