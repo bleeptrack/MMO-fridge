@@ -10,6 +10,29 @@ let stageID = undefined
 let wordList = getWordsList('english', 2000);
 wordList = _.shuffle(wordList)
 let counter = 0
+let counter2 = 0
+
+let words = [
+    "Amiga",
+    "Atari",
+    "C64",
+    "Web",
+    "4K",
+    "Pixel",
+    "aaaa",
+    "Compo",
+    "Shader",
+    "Showdown",
+    "Code",
+    "Chiptunes",
+    "Evoke",
+    "Cologne",
+    "AbenteuerHallenKALK",
+    "Beer",
+    "Party",
+    "Tracker"
+]
+words = _.shuffle(words)
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -21,15 +44,24 @@ app.get('/stage', (req, res) => {
   res.sendFile(__dirname + '/stage.html');
 });
 
+function getWord() {
+    if (Math.random() > 0.5) {
+        counter = (counter+1) % wordList.length
+        return wordList[counter]
+    } else {
+        counter2 = (counter2+1) % words.length
+        return words[counter2]
+    }
+}
+
 io.on('connection', (socket) => {
   console.log('a user connected');
   if(stageID){
       let msg = {
          ID: socket.id,
-         word: wordList[counter]
+         word: getWord()
       }
 
-      counter = (counter+1) % wordList.length
       io.to(stageID).emit("join", msg);
       socket.emit("welcome", msg);
     }
