@@ -13,17 +13,116 @@
         <canvas width="800" height="600"></canvas>
         <span id="player-text"></span>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="lodash.min.js"></script>
+
         <script>
             let canvas = document.querySelector("canvas")
             let ctx = canvas.getContext("2d")
             var socket = io();
+
+            let x = Math.random()*600 + 100
+            let y = Math.random()*400 + 100
+            let speed = 5
+
+            let touchCenter = {x:0, y:0}
+            let isTouching = false
+            let currentTouch = {x:0, y:0}
+            let radius = 100
 
             socket.on("welcome", function(msg) {
                 let span = document.getElementById("player-text")
                 span.innerHTML = msg.word
             })
 
-            canvas.onmousemove = function (e) {
+            let keys = {}
+            document.body.onkeydown = function(e) {
+                keys[e.key] = true
+            }
+            document.body.onkeyup = function(e) {
+                keys[e.key] = false
+            }
+
+            function update() {
+                let oldX = x
+                let oldY = y
+                if (keys["ArrowLeft"] === true) {
+                    x -= speed
+                }
+                if (keys["ArrowRight"] === true) {
+                    x += speed
+                }
+                if (keys["ArrowUp"] === true) {
+                    y -= speed
+                }
+                if (keys["ArrowDown"] === true) {
+                    y += speed
+                }
+
+                if (isTouching) {
+                    let dx = currentTouch.x - touchCenter.x
+                    let dy = currentTouch.y - touchCenter.y
+
+
+                    // cap to range using lodash
+                    dx = _.clamp(dx, -radius, radius)/radius
+                    dy = _.clamp(dy, -radius, radius)/radius
+
+                    x += dx*speed
+                    y += dy*speed
+                }
+
+                let changed = (x !== oldX || y !== oldY)
+
+                if (changed) {
+                    drawAndEmit()
+                }
+                requestAnimationFrame(update)
+            }
+            update()
+
+            canvas.ontouchstart = function(e) {
+                e.preventDefault()
+                isTouching = true
+                let touchX = e.touches[0].clientX - canvas.offsetLeft
+                let touchY = e.touches[0].clientY - canvas.offsetTop
+                touchCenter.x = touchX
+                touchCenter.y = touchY
+                            console.log(touchCenter)
+            }
+            canvas.ontouchend = function(e) {
+                e.preventDefault()
+                isTouching = false
+                drawAndEmit()
+            }
+            canvas.ontouchmove = function(e) {
+                e.preventDefault()
+                if (isTouching) {
+                    let touchX = e.touches[0].clientX - canvas.offsetLeft
+                    let touchY = e.touches[0].clientY - canvas.offsetTop
+                    currentTouch.x = touchX
+                    currentTouch.y = touchY
+                }
+            }
+
+            function drawAndEmit() {
+                console.log(x,y)
+                ctx.fillStyle = "white"
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = "black"
+                ctx.fillRect(x, y, 10, 10)
+
+                if (isTouching) {
+                    ctx.strokeStyle = "blue"
+                    ctx.lineWidth = 5
+                    ctx.beginPath()
+                    ctx.arc(touchCenter.x, touchCenter.y, radius, 0, 2*Math.PI)
+                    ctx.stroke()
+                }
+
+                socket.emit('move', {x:x , y:y });
+            }
+
+            /*canvas.onmousemove = function (e) {
                 let x = e.offsetX
                 let y = e.offsetY
                 ctx.fillStyle = "white"
@@ -43,7 +142,7 @@
                 ctx.fillRect(x, y, 10, 10)
 
                 socket.emit('move', {x:x , y:y });
-            }
+            }*/
 
 
 
