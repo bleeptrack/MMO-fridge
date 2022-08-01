@@ -58,18 +58,47 @@
                     ctx.translate(o.x, o.y)
                     ctx.fillStyle = "white"
                     ctx.strokeStyle = "black"
+                    ctx.shadowColor = "black"
+                    ctx.shadowBlur = 5
+                    ctx.shadowOffsetX = 1
+                    ctx.shadowOffsetY = 3
                     ctx.fillRect(- 10, - 30, ctx.measureText(o.text).width + 20, 40)
-                    ctx.strokeRect(- 10, - 30, ctx.measureText(o.text).width + 20, 40)
+                    ctx.shadowBlur = 0
+                    ctx.shadowColor = "transparent"
                     ctx.fillStyle = "black"
                     ctx.fillText(o.text, 0, 0)
                     ctx.restore()
                 }
+
+                ctx.fillStyle = "yellow"
+                ctx.fillRect(20, 525, ctx.measureText(tasks[currentTask]).width, 30)
+                ctx.fillStyle = "black"
+                ctx.fillText(tasks[currentTask], 20, 550)
+
                 requestAnimationFrame(render)
             }
 
             function update() {
                 //objects[0].x = 100 + Math.sin(Date.now() / 1000) * 100
             }
+
+            document.body.onkeydown = function(e) {
+                if(e.key == "ArrowLeft"){
+                    currentTask = (currentTask - 1 + tasks.length) % tasks.length
+                }
+                if(e.key == "ArrowRight"){
+                    currentTask = (currentTask + 1) % tasks.length
+                }
+            }
+
+            let currentTask = 0
+            let tasks = [
+                            "Please sort yourselves alphabetically",
+                            "Make short poems",
+                            "Sort yourselves by length", // and color?
+                            "Form clusters of similar words",
+                            "Form a single long scroll text"
+                            ]
 
             render()
         </script>
